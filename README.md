@@ -8,7 +8,7 @@ A batteries-included Golang project template derived from bootstrapping many Gol
 
 `pre-commit`: https://pre-commit.com/
 
-> A framework for managing and maintaining multi-language pre-commit hooks. 
+> A framework for managing and maintaining multi-language pre-commit hooks.
 
 `golanglint-ci`: https://golangci-lint.run/
 
@@ -40,10 +40,31 @@ https://github.com/golang-standards/project-layout
 
 ## Test It 🧪
 
-`go test ./...`
+Test for coverage and race conditions
+
+`go test -race -covermode=atomic .
+/...`
+
+## Lint It 👕
+
+`pre-commit run --all-files --show-diff-on-failure`
 
 ## Fork It 🍴
 
 This is a template project for starting your next Golang proj:
 
 https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
+
+## How To
+
+#### `fmt.Println` is banned in favor of `logrus`
+
+example `fmt.Println("Hello, world")` will throw an error running `golangci-lint run ./...` or `pre-commit`
+
+#### Environment Variables
+
+| Name          | Description   | Default       |
+| ------------- | ------------- | ------------- |
+| `CONFIG_PATH`   | config.env directory | ./config.env |
+| `LOG_LEVEL`  | logging levels: `trace`,`debug`,`info`,`warn` see [ParseLevel(lvl string)](https://github.com/sirupsen/logrus/blob/fdf1618bf7436ec3ee65753a6e2999c335e97221/logrus.go#L25) | `INFO` |
+| `LOG_FORMAT` | logging format: `json` or defaults to plaintext | `PLAIN` |
