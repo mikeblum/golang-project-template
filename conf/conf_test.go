@@ -7,8 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSomething(t *testing.T) {
-	assert.True(t, true, "True is true!")
+func TestNewConfig(t *testing.T) {
+	config, err := NewConfig()
+	assert.Nil(t, err)
+	assert.NotNil(t, config)
 }
 
 func TestGetEnvVar(t *testing.T) {

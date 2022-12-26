@@ -11,7 +11,5 @@ func main() {
 	if err != nil {
 		log.Fatalf("error loading conf: %v", err)
 	}
-	for _, key := range config.AllKeys() {
-		log.Infof("%s", key)
-	}
+	log.Infof("golang-project-template: %t", config != nil)
 }
