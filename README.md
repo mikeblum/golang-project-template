@@ -1,10 +1,10 @@
 # golang-project-template
 
-A batteries-included Golang project template derived from bootstrapping many Golang projects
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/mikeblum/golang-project-template)](https://goreportcard.com/report/github.com/mikeblum/golang-project-template)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A batteries-included Golang project template derived from bootstrapping many Golang projects
 
 ---
 
@@ -16,7 +16,7 @@ A batteries-included Golang project template derived from bootstrapping many Gol
 
 > A framework for managing and maintaining multi-language pre-commit hooks.
 
-`golanglint-ci`: https://golangci-lint.run/
+`golangci-lint`: https://golangci-lint.run/
 
 > Fast linters Runner for Go.
 
@@ -82,11 +82,11 @@ https://docs.github.com/en/repositories/creating-and-managing-repositories/creat
 
 ## How To
 
-#### `fmt.Println` is banned in favor of `logrus`
+### `fmt.Println` is banned in favor of `logrus`
 
 example `fmt.Println("Hello, world")` will throw an error running `golangci-lint run ./...` or `pre-commit`
 
-#### Environment Variables
+### Environment Variables
 
 **note:** env variable values are case-insensitive ex. `LOG_LEVEL=` both `INFO` vs `info` are valid.
 
@@ -104,3 +104,5 @@ Branch for web-based Golang apps with Gin 🥃
 https://github.com/gin-gonic/gin
 
 Branch for cli-based Golang apps with Cobra 🐍
+
+https://github.com/spf13/cobra
