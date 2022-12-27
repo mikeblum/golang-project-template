@@ -1,8 +1,14 @@
 # golang-project-template
 
-![golang-helloworld](https://user-images.githubusercontent.com/3905463/209570840-6b4c3df0-aca4-4de0-899d-ebc823ae0366.png)
-
 A batteries-included Golang project template derived from bootstrapping many Golang projects
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/mikeblum/golang-project-template)](https://goreportcard.com/report/github.com/mikeblum/golang-project-template)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+![golang-helloworld](https://user-images.githubusercontent.com/3905463/209570840-6b4c3df0-aca4-4de0-899d-ebc823ae0366.png)
 
 ## GOTO libraries 📚
 
@@ -98,5 +104,3 @@ Branch for web-based Golang apps with Gin 🥃
 https://github.com/gin-gonic/gin
 
 Branch for cli-based Golang apps with Cobra 🐍
-
-https://github.com/spf13/cobra
