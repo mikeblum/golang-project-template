@@ -22,6 +22,10 @@ A batteries-included Golang project template derived from bootstrapping many Gol
 
 > Go configuration with fangs.
 
+`testify`: https://github.com/stretchr/testify
+
+A toolkit with common assertions and mocks that plays nicely with the standard library .
+
 ## Inspired By 💡
 
 https://github.com/golang-standards/project-layout
