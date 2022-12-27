@@ -27,3 +27,5 @@ A batteries-included Golang project template derived from bootstrapping many Gol
 https://github.com/golang-standards/project-layout
 
 🍴 from https://github.com/cloudflare/cloudflare-go/blob/master/.golintci.yaml
+
+🍴 from https://github.com/github/gitignore/blob/main/Go.gitignore
