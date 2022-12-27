@@ -24,7 +24,7 @@ A batteries-included Golang project template derived from bootstrapping many Gol
 
 `testify`: https://github.com/stretchr/testify
 
-A toolkit with common assertions and mocks that plays nicely with the standard library.
+> A toolkit with common assertions and mocks that plays nicely with the standard library.
 
 ## Inspired By 💡
 
@@ -38,6 +38,21 @@ https://github.com/golang-standards/project-layout
 
 `go run main.go`
 
+## Configure It ☑️
+
+‼️ ⚠️ make sure `config.env` is excluded from git as environment variables can contain credentials and secrets.
+
+`vim config.env`
+
+```
+LOG_LEVEL=debug
+LOG_FORMAT=json
+```
+
+or via CLI:
+
+`export LOG_FORMAT=json && export LOG_LEVEL=debug && go run main.go`
+
 ## Test It 🧪
 
 Test for coverage and race conditions
@@ -48,6 +63,10 @@ Test for coverage and race conditions
 ## Lint It 👕
 
 `pre-commit run --all-files --show-diff-on-failure`
+
+## Make It ⚙️
+
+`make help`
 
 ## Fork It 🍴
 
@@ -63,8 +82,21 @@ example `fmt.Println("Hello, world")` will throw an error running `golangci-lint
 
 #### Environment Variables
 
+**note:** env variable values are case-insensitive ex. `LOG_LEVEL=` both `INFO` vs `info` are valid.
+
 | Name          | Description   | Default       |
 | ------------- | ------------- | ------------- |
-| `CONFIG_PATH`   | config.env directory | ./config.env |
+| `CONFIG_PATH`   | config.env directory | `./config.env` |
 | `LOG_LEVEL`  | logging levels: `trace`,`debug`,`info`,`warn` see [ParseLevel(lvl string)](https://github.com/sirupsen/logrus/blob/fdf1618bf7436ec3ee65753a6e2999c335e97221/logrus.go#L25) | `INFO` |
 | `LOG_FORMAT` | logging format: `json` or defaults to plaintext | `PLAIN` |
+
+
+## Roadmap
+
+Branch for web-based Golang apps with Gin 🥃
+
+https://github.com/gin-gonic/gin
+
+Branch for cli-based Golang apps with Cobra 🐍
+
+https://github.com/spf13/cobra
