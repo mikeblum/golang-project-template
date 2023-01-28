@@ -24,9 +24,9 @@ A batteries-included Golang project template derived from bootstrapping many Gol
 
 > Structured, pluggable logging for Go.
 
-`viper`: https://github.com/spf13/viper
+`koanf`: https://github.com/knadh/koanf
 
-> Go configuration with fangs.
+> Simple, lightweight, extensible, configuration management library for Go.
 
 `testify`: https://github.com/stretchr/testify
 
@@ -92,7 +92,7 @@ example `fmt.Println("Hello, world")` will throw an error running `golangci-lint
 
 | Name          | Description   | Default       |
 | ------------- | ------------- | ------------- |
-| `CONFIG_PATH`   | config.env directory | `./config.env` |
+| `CONF_PATH`   | config.env directory | `./.env` |
 | `LOG_LEVEL`  | logging levels: `trace`,`debug`,`info`,`warn` see [ParseLevel(lvl string)](https://github.com/sirupsen/logrus/blob/fdf1618bf7436ec3ee65753a6e2999c335e97221/logrus.go#L25) | `INFO` |
 | `LOG_FORMAT` | logging format: `json` or defaults to plaintext | `PLAIN` |
 
@@ -103,6 +103,6 @@ Branch for web-based Golang apps with Gin 🥃
 
 https://github.com/gin-gonic/gin
 
-Branch for cli-based Golang apps with Cobra 🐍
+Branch for cli-based Golang apps with `urfave/cli`
 
-https://github.com/spf13/cobra
+https://github.com/urfave/cli/

@@ -33,10 +33,10 @@ pre-commit: test lint
 
 ## test: Test with go test
 test:
-	go test -race -covermode=atomic -coverprofile=coverage.out ./... && go tool cover -html=coverage.out && rm coverage.out
+	go test -test.v -race -covermode=atomic -coverprofile=coverage.out ./... && go tool cover -html=coverage.out && rm coverage.out
 
 ## test-perf: Benchmark tests with go test -bench
 test-perf:
-	go test -benchmem -bench=. -coverprofile=coverage-bench.out ./... && go tool cover -html=coverage-bench.out && rm coverage-bench.out
+	go test -test.v -benchmem -bench=. -coverprofile=coverage-bench.out ./... && go tool cover -html=coverage-bench.out && rm coverage-bench.out
 
 .PHONY: lint fmt tidy pre-commit test test-perf
