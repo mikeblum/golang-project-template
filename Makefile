@@ -28,8 +28,8 @@ fmt:
 tidy:
 	go mod tidy -compat=1.17
 
-## pre-commit: Chain lint + test
-pre-commit: test lint
+## pre-commit: Chain lint + test + scan
+pre-commit: test lint vuln
 
 ## test: Test with go test
 test:
@@ -39,4 +39,9 @@ test:
 test-perf:
 	go test -test.v -benchmem -bench=. -coverprofile=coverage-bench.out ./... && go tool cover -html=coverage-bench.out && rm coverage-bench.out
 
-.PHONY: lint fmt tidy pre-commit test test-perf
+## vuln: Scan against the Go vulnerability database
+vuln:
+	go install golang.org/x/vuln/cmd/govulncheck@latest
+	govulncheck ./...
+
+.PHONY: lint fmt tidy pre-commit test test-perf vuln

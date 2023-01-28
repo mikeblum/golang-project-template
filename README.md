@@ -74,6 +74,12 @@ Test for coverage and race conditions
 
 `make help`
 
+## Secure It 
+
+`make vuln` 🔒
+
+With [Vulnerability Management for Go](https://go.dev/blog/vuln) scan our proj against the Go vulnerability database.
+
 ## Fork It 🍴
 
 This is a template project for starting your next Golang proj:
