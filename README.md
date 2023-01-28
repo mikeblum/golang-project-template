@@ -2,6 +2,8 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/mikeblum/golang-project-template)](https://goreportcard.com/report/github.com/mikeblum/golang-project-template)
 
+![Coverage](https://raw.githubusercontent.com/mikeblum/golang-project-template/main/images/badges/coverage.svg)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A batteries-included Golang project template derived from bootstrapping many Golang projects
@@ -46,9 +48,9 @@ https://github.com/golang-standards/project-layout
 
 ## Configure It ☑️
 
-‼️ ⚠️ make sure `config.env` is excluded from git as environment variables can contain credentials and secrets.
+‼️ ⚠️ make sure `.env` is excluded from git as environment variables can contain credentials and secrets.
 
-`vim config.env`
+`vim .env`
 
 ```
 LOG_LEVEL=debug
@@ -98,7 +100,7 @@ example `fmt.Println("Hello, world")` will throw an error running `golangci-lint
 
 | Name          | Description   | Default       |
 | ------------- | ------------- | ------------- |
-| `CONF_PATH`   | config.env directory | `./.env` |
+| `CONF_PATH`   |  dotenv-style conf file | `./.env` |
 | `LOG_LEVEL`  | logging levels: `trace`,`debug`,`info`,`warn` see [ParseLevel(lvl string)](https://github.com/sirupsen/logrus/blob/fdf1618bf7436ec3ee65753a6e2999c335e97221/logrus.go#L25) | `INFO` |
 | `LOG_FORMAT` | logging format: `json` or defaults to plaintext | `PLAIN` |
 

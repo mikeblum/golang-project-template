@@ -44,4 +44,10 @@ vuln:
 	go install golang.org/x/vuln/cmd/govulncheck@latest
 	govulncheck ./...
 
-.PHONY: lint fmt tidy pre-commit test test-perf vuln
+## badges: Generate README badges
+badge badges:
+	go test ./... -coverprofile coverage.out \
+	COVERAGE=$(go tool cover -func=coverage.out | grep total: | grep -Eo '[0-9]+\.[0-9]+') \
+	curl -sL "https://img.shields.io/static/v1?label=coverage&message=$$COVERAGE%&color=$$COLOR&logo=go" > images/badges/coverage.svg
+
+.PHONY: lint fmt tidy pre-commit test test-perf vuln badges
