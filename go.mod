@@ -1,6 +1,6 @@
 module github.com/mikeblum/golang-project-template
 
-go 1.17
+go 1.19
 
 require (
 	github.com/knadh/koanf v1.5.0

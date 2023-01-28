@@ -30,11 +30,12 @@ linters:
     - goimports         # In addition to fixing imports, goimports also formats your code in the same style as gofmt.
     - gosec             # Inspects source code for security problems
     - misspell          # Finds commonly misspelled English words in comments
+    - nakedret          # Finds naked returns in functions greater than a specified function length.
     - prealloc          # Finds slice declarations that could potentially be pre-allocated
     - revive            # replaces deprecated golint
 
 run:
   timeout: 5m
-  go: '1.18'
+  go: '1.19'
   issues-exit-code: 1
   modules-download-mode: readonly
