@@ -2,7 +2,7 @@
 
 MAKEFLAGS += --silent
 
-GOLANGCI_LINT_VERSION = v1.50.1
+GOLANGCI_LINT_VERSION = v1.54.1
 
 all: help
 
@@ -30,6 +30,10 @@ tidy:
 
 ## pre-commit: Chain lint + test + scan
 pre-commit: test lint vuln
+
+## run: go run main.go
+run:
+	go run main.go
 
 ## test: Test with go test
 test:

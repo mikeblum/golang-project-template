@@ -1,51 +1,74 @@
 package log
 
 import (
+	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
 	"github.com/knadh/koanf"
 	"github.com/mikeblum/golang-project-template/conf"
-	"github.com/sirupsen/logrus"
 )
 
 // logging configuration
 
-const jsonLog = "JSON"
-const envLogLevel = "LOG_LEVEL"
-const envLogFormat = "LOG_FORMAT"
+const (
+	jsonLog      = "JSON"
+	envLogLevel  = "LOG_LEVEL"
+	envLogFormat = "LOG_FORMAT"
+	logAttrError = "error"
+)
+
+type Log struct {
+	*slog.Logger
+}
 
 // NewLog - configure logging
-func NewLog() *logrus.Entry {
+func NewLog() *Log {
 	var cfg *koanf.Koanf
 	var err error
-	var cfgLogLevel string
+	var log *slog.Logger
+	var cfgLogLevel slog.Level
+	logLevels := map[string]slog.Level{
+		slog.LevelDebug.String(): slog.LevelDebug,
+	}
 	if cfg, err = conf.NewConf(conf.Provider("")); err != nil {
 		// default to INFO
-		cfgLogLevel = logrus.InfoLevel.String()
+		cfgLogLevel = slog.LevelInfo
 	} else {
-		cfgLogLevel = cfg.String(envLogLevel)
+		cfgLogLevel = logLevels[cfg.String(envLogLevel)]
+	}
+	handler := &slog.HandlerOptions{
+		Level: cfgLogLevel,
 	}
 	logFormat := conf.GetEnv(envLogFormat, "")
 	if strings.EqualFold(logFormat, jsonLog) {
-		logrus.SetFormatter(&logrus.JSONFormatter{
-			DisableHTMLEscape: true,
-		})
+		// review html escape
+		log = slog.New(slog.NewJSONHandler(os.Stdout, handler))
 	} else {
-		logrus.SetFormatter(&logrus.TextFormatter{
-			FullTimestamp: true,
-			// timestamp with millisecond precision
-			TimestampFormat: "Jan _2 15:04:05.00",
-			ForceColors:     true,
-		})
+		// implement in slog
+		// logrus.SetFormatter(&logrus.TextFormatter{
+		// 	FullTimestamp: true,
+		// 	// timestamp with millisecond precision
+		// 	TimestampFormat: "Jan _2 15:04:05.00",
+		// 	ForceColors:     true,
+		// })
+		log = slog.New(slog.NewTextHandler(os.Stdout, handler))
 	}
-	logrus.SetOutput(os.Stdout)
-	var logLevel logrus.Level
-	logLevel, err = logrus.ParseLevel(conf.GetEnv(envLogLevel, cfgLogLevel))
-	if err != nil {
-		logLevel = logrus.InfoLevel
-	}
-	logrus.SetLevel(logLevel)
 
-	return logrus.WithFields(logrus.Fields{})
+	// set default logger
+	slog.SetDefault(log)
+	return &Log{log}
+}
+
+// Wrappers
+// https://pkg.go.dev/golang.org/x/exp/slog#hdr-Wrapping_output_methods
+
+func (log *Log) WithError(err error) *Log {
+	ctx := log.With(logAttrError, err)
+	return &Log{ctx}
+}
+
+func (log *Log) Infof(format string, args ...any) {
+	log.Info(fmt.Sprintf(format, args...))
 }

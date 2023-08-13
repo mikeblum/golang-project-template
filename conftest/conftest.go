@@ -8,21 +8,21 @@ import (
 )
 
 const (
-	MockConfFile      = ".test.env"
-	MockConfFilePerms = 0600
+	TestConfFile      = ".test.env"
+	TestConfFilePerms = 0600
 )
 
 func SetupConf() (*os.File, error) {
 	var conf *os.File
 	var err error
-	_, err = os.Stat(MockConfFile)
+	_, err = os.Stat(TestConfFile)
 	if os.IsNotExist(err) {
-		if conf, err = os.Create(MockConfFile); err != nil {
+		if conf, err = os.Create(TestConfFile); err != nil {
 			return nil, err
 		}
 		defer conf.Close()
 	} else {
-		if conf, err = os.Open(MockConfFile); err != nil {
+		if conf, err = os.Open(TestConfFile); err != nil {
 			return nil, err
 		}
 	}
@@ -30,6 +30,6 @@ func SetupConf() (*os.File, error) {
 }
 
 func CleanupConf(t *testing.T) {
-	err := os.Remove(MockConfFile)
+	err := os.Remove(TestConfFile)
 	assert.Nil(t, err)
 }

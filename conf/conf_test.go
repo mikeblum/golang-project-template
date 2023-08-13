@@ -22,7 +22,7 @@ func setupSuite(t *testing.T) (*ConfTestSuite, func(t *testing.T, conf *os.File)
 	}, teardownSuite
 }
 
-func teardownSuite(t *testing.T, conf *os.File) {
+func teardownSuite(t *testing.T, _ *os.File) {
 	conftest.CleanupConf(t)
 }
 
@@ -41,7 +41,7 @@ func TestConf(t *testing.T) {
 }
 
 func NewConfTest(t *testing.T) {
-	conf, err := NewConf(Provider(conftest.MockConfFile))
+	conf, err := NewConf(Provider(conftest.TestConfFile))
 	assert.Nil(t, err)
 	assert.NotNil(t, conf)
 }
@@ -62,9 +62,9 @@ func DotEnvConfTest(t *testing.T) {
 	expectedValue := "test_file_value"
 	// !!WARN!! `` injects \tabs
 	cfg := fmt.Sprintf("%s=%s", expectedKey, expectedValue)
-	err := os.WriteFile(conftest.MockConfFile, []byte(cfg), conftest.MockConfFilePerms)
+	err := os.WriteFile(conftest.TestConfFile, []byte(cfg), conftest.TestConfFilePerms)
 	assert.Nil(t, err)
-	conf, err := NewConf(Provider(conftest.MockConfFile))
+	conf, err := NewConf(Provider(conftest.TestConfFile))
 	assert.Nil(t, err)
 	assert.Equal(t, expectedValue, conf.Get(expectedKey).(string))
 }
@@ -76,7 +76,7 @@ func EnvConfTest(t *testing.T) {
 	expectedValue := "test_env_value"
 	os.Setenv(envVar, expectedValue)
 	defer os.Unsetenv(envVar)
-	conf, err := NewConf(Provider(conftest.MockConfFile))
+	conf, err := NewConf(Provider(conftest.TestConfFile))
 	assert.Nil(t, err)
 	assert.Equal(t, expectedValue, conf.Get(expectedKey).(string))
 }
