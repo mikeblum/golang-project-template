@@ -22,9 +22,9 @@ A 🔋batteries-included Golang project template derived from bootstrapping many
 
 > Fast linters Runner for Go.
 
-`logrus`: https://github.com/sirupsen/logrus
+`log/slog`: 
 
-> Structured, pluggable logging for Go.
+> Stdlib structured, pluggable logging >= Go 1.21.0.
 
 `koanf`: https://github.com/knadh/koanf
 
@@ -96,13 +96,13 @@ example `fmt.Println("Hello, world")` will throw an error running `golangci-lint
 
 ### Environment Variables
 
-**note:** env variable values are case-insensitive ex. `LOG_LEVEL=` both `INFO` vs `info` are valid.
+**note:** env variable values are case-insensitive ex. `LOG_LEVEL=` both `INFO` and `info` are valid.
 
 | Name          | Description   | Default       |
 | ------------- | ------------- | ------------- |
 | `CONF_PATH`   |  dotenv-style conf file | `./.env` |
 | `LOG_LEVEL`  | logging levels: `trace`,`debug`,`info`,`warn` | `INFO` |
-| `LOG_FORMAT` | logging format: `json` or defaults to plaintext | `PLAIN` |
+| `LOG_FORMAT` | logging format: `json` or defaults to plaintext | `TEXT` |
 
 
 ## Roadmap

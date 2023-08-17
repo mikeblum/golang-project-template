@@ -8,25 +8,35 @@ import (
 )
 
 const (
-	TestConfFile      = ".test.env"
-	TestConfFilePerms = 0600
+	TestConfFile = ".test.env"
 )
 
+type Suite struct {
+	Conf *os.File
+}
+
+func SetupSuite(t *testing.T) (*Suite, func(t *testing.T, conf *os.File)) {
+	conf, err := SetupConf()
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	return &Suite{
+		Conf: conf,
+	}, TeardownSuite
+}
+
+func TeardownSuite(t *testing.T, _ *os.File) {
+	CleanupConf(t)
+}
+
 func SetupConf() (*os.File, error) {
-	var conf *os.File
 	var err error
 	_, err = os.Stat(TestConfFile)
 	if os.IsNotExist(err) {
-		if conf, err = os.Create(TestConfFile); err != nil {
-			return nil, err
-		}
-		defer conf.Close()
-	} else {
-		if conf, err = os.Open(TestConfFile); err != nil {
+		if _, err = os.Create(TestConfFile); err != nil {
 			return nil, err
 		}
 	}
-	return conf, err
+	return os.Open(TestConfFile)
 }
 
 func CleanupConf(t *testing.T) {

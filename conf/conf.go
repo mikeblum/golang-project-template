@@ -13,7 +13,7 @@ import (
 const (
 	EnvConfigPath   = "CONF_PATH"
 	EnvVarNamespace = ""
-	EnvDelimiter    = "_"
+	EnvDelimiter    = "."
 	PropDelimiter   = "."
 	ConfFile        = ".env"
 	cwd             = "."
@@ -45,8 +45,8 @@ func defaultConfName(confName string) string {
 }
 
 func processEnvVar(s string) string {
-	return strings.TrimPrefix(strings.Replace(strings.ToLower(
-		strings.TrimPrefix(s, EnvVarNamespace)), EnvDelimiter, PropDelimiter, -1), PropDelimiter)
+	// no-op
+	return s
 }
 
 // GetEnv lookup an environment variable or fallback
