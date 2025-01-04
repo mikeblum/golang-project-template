@@ -36,6 +36,6 @@ linters:
 
 run:
   timeout: 5m
-  go: '1.21.0'
+  go: '1.23.4'
   issues-exit-code: 1
   modules-download-mode: readonly
