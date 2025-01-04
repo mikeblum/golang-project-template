@@ -2,7 +2,7 @@
 
 MAKEFLAGS += --silent
 
-GOLANGCI_LINT_VERSION = v1.54.1
+GOLANGCI_LINT_VERSION = v1.63.4
 
 all: help
 
@@ -26,7 +26,7 @@ fmt:
 
 # tidy: Tidy with go mod tidy
 tidy:
-	go mod tidy -compat=1.17
+	go mod tidy
 
 ## pre-commit: Chain lint + test + scan
 pre-commit: test lint vuln
