@@ -29,4 +29,3 @@ jobs:
         with:
           version: v1.64.6
           args: --timeout=5m --out-format=colored-line-number --config=.golangci.yml
-          only-new-issues: true

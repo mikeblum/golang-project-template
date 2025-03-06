@@ -16,6 +16,7 @@ import (
 	"github.com/mikeblum/golang-project-template/conf"
 	"github.com/mikeblum/golang-project-template/conftest"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestLog(t *testing.T) {
@@ -103,7 +104,7 @@ func LogTextTest(t *testing.T) {
 }
 
 func LogFormatInvalidTest(t *testing.T) {
-	assert.Zero(t, LogFormat("ASCII"))
+	assert.Zero(t, Format("ASCII"))
 }
 
 func ReplaceAttrTraceTest(t *testing.T) {
@@ -119,13 +120,13 @@ func ReplaceAttrFatalTest(t *testing.T) {
 func LogLevelTest(t *testing.T, logLevel slog.Level) {
 	os.Setenv(envLogLevel, logLevel.String())
 	conf, err := conf.NewConf(conf.Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	options := textLogOptions()
 	options.Conf = conf
 	log := NewLogWithOptions(options)
 	assert.True(t, log.Enabled(context.TODO(), logLevel))
-	actual, err := LogLevel(logLevel.String())
-	assert.Nil(t, err)
+	actual, err := Level(logLevel.String())
+	require.NoError(t, err)
 	assert.Equal(t, logLevel, actual)
 	os.Unsetenv(envLogLevel)
 }
@@ -133,13 +134,15 @@ func LogLevelTest(t *testing.T, logLevel slog.Level) {
 func LogLevelConfTest(t *testing.T, logLevel slog.Level) {
 	os.Unsetenv(envLogLevel)
 	confFile, err := os.Create(conftest.TestConfFile)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, confFile)
-	confFile.WriteString(fmt.Sprintf("%s=%s", envLogLevel, logLevel.String()))
-	confFile.Sync()
+	_, err = confFile.WriteString(fmt.Sprintf("%s=%s", envLogLevel, logLevel.String()))
+	require.NoError(t, err)
+	err = confFile.Sync()
+	require.NoError(t, err)
 	confFile.Close()
 	conf, err := conf.NewConf(conf.Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	options := textLogOptions()
 	options.Conf = conf
 	log := NewLogWithOptions(options)
@@ -148,11 +151,11 @@ func LogLevelConfTest(t *testing.T, logLevel slog.Level) {
 
 func LogLevelOptionsTest(t *testing.T, logLevel slog.Level) {
 	err := os.Unsetenv(envLogLevel)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	err = os.Remove(conftest.TestConfFile)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	conf, err := conf.NewConf(conf.Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	options := textLogOptions()
 	options.Conf = conf
 	options.Level = logLevel
@@ -160,33 +163,35 @@ func LogLevelOptionsTest(t *testing.T, logLevel slog.Level) {
 	assert.True(t, log.Enabled(context.TODO(), logLevel))
 }
 
-func LogFormatConfTest(t *testing.T, logFormat Format) {
+func LogFormatConfTest(t *testing.T, logFormat FormatLevel) {
 	os.Unsetenv(envLogFormat)
 	os.Unsetenv(envLogLevel)
 	confFile, err := os.Create(conftest.TestConfFile)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, confFile)
-	confFile.WriteString(fmt.Sprintf("%s=%s", envLogFormat, LogFormats()[logFormat]))
-	confFile.Sync()
+	_, err = confFile.WriteString(fmt.Sprintf("%s=%s", envLogFormat, Formats()[logFormat]))
+	require.NoError(t, err)
+	err = confFile.Sync()
+	require.NoError(t, err)
 	confFile.Close()
 	conf, err := conf.NewConf(conf.Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	log := NewLogWithOptions(Options{
 		Conf:   conf,
 		Format: logFormat,
 		Level:  slog.LevelInfo,
 	})
-	assert.Equal(t, logFormat, log.Format)
+	assert.Equal(t, logFormat, log.FormatLevel)
 }
 
 func LogFormatOptionsTest(t *testing.T, logLevel slog.Level) {
 	err := os.Unsetenv(envLogFormat)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	// clear the .env file
 	err = os.Truncate(conftest.TestConfFile, 0)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	conf, err := conf.NewConf(conf.Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	options := textLogOptions()
 	options.Conf = conf
 	options.Level = logLevel
@@ -195,74 +200,74 @@ func LogFormatOptionsTest(t *testing.T, logLevel slog.Level) {
 }
 
 func LogLevelTraceTest(t *testing.T) {
-	lvl, err := LogLevel(LevelTraceName)
-	assert.Nil(t, err)
+	lvl, err := Level(LevelTraceName)
+	require.NoError(t, err)
 	LogLevelTest(t, lvl)
 }
 
 func LogLevelConfTraceTest(t *testing.T) {
-	lvl, err := LogLevel(LevelTraceName)
-	assert.Nil(t, err)
+	lvl, err := Level(LevelTraceName)
+	require.NoError(t, err)
 	LogLevelConfTest(t, lvl)
 }
 
 func LogLevelOptionsTraceTest(t *testing.T) {
-	lvl, err := LogLevel(LevelTraceName)
-	assert.Nil(t, err)
+	lvl, err := Level(LevelTraceName)
+	require.NoError(t, err)
 	LogLevelOptionsTest(t, lvl)
 }
 
 func LogLevelDebugTest(t *testing.T) {
-	lvl, err := LogLevel(slog.LevelDebug.String())
-	assert.Nil(t, err)
+	lvl, err := Level(slog.LevelDebug.String())
+	require.NoError(t, err)
 	LogLevelTest(t, lvl)
 }
 
 func LogLevelConfDebugTest(t *testing.T) {
-	lvl, err := LogLevel(slog.LevelDebug.String())
-	assert.Nil(t, err)
+	lvl, err := Level(slog.LevelDebug.String())
+	require.NoError(t, err)
 	LogLevelConfTest(t, lvl)
 }
 
 func LogLevelOptionsDebugTest(t *testing.T) {
-	lvl, err := LogLevel(slog.LevelDebug.String())
-	assert.Nil(t, err)
+	lvl, err := Level(slog.LevelDebug.String())
+	require.NoError(t, err)
 	LogLevelOptionsTest(t, lvl)
 }
 
 func LogLevelInfoTest(t *testing.T) {
-	lvl, err := LogLevel(slog.LevelInfo.String())
-	assert.Nil(t, err)
+	lvl, err := Level(slog.LevelInfo.String())
+	require.NoError(t, err)
 	LogLevelTest(t, lvl)
 }
 
 func LogLevelWarnTest(t *testing.T) {
-	lvl, err := LogLevel(slog.LevelWarn.String())
-	assert.Nil(t, err)
+	lvl, err := Level(slog.LevelWarn.String())
+	require.NoError(t, err)
 	LogLevelTest(t, lvl)
 }
 
 func LogLevelErrorTest(t *testing.T) {
-	lvl, err := LogLevel(slog.LevelError.String())
-	assert.Nil(t, err)
+	lvl, err := Level(slog.LevelError.String())
+	require.NoError(t, err)
 	LogLevelTest(t, lvl)
 }
 
 func LogLevelFatalTest(t *testing.T) {
-	lvl, err := LogLevel(LevelFatalName)
-	assert.Nil(t, err)
+	lvl, err := Level(LevelFatalName)
+	require.NoError(t, err)
 	LogLevelTest(t, lvl)
 }
 
 func LogLevelInvalidTest(t *testing.T) {
-	logFmt, err := LogLevel("NONE")
-	assert.NotNil(t, err)
+	logFmt, err := Level("NONE")
+	require.Error(t, err)
 	assert.Equal(t, slog.LevelInfo, logFmt)
 }
 
 func LogLevelEmptyTest(t *testing.T) {
-	logFmt, err := LogLevel("")
-	assert.Nil(t, err)
+	logFmt, err := Level("")
+	require.NoError(t, err)
 	assert.Equal(t, slog.LevelInfo, logFmt)
 }
 
@@ -306,15 +311,14 @@ func LogFormatTest(t *testing.T, logLevelLabel string, logFormat string, args ..
 		t.Fatalf("%s not a supported LOG_LEVEL", logLevelLabel)
 	}
 	// run LogHandlerTest harness for JSON logs
-	if LogFormat(logFormat) == LogFormatJSON {
+	if Format(logFormat) == LogFormatJSON {
 		err := slogtest.TestHandler(log.Handler(), func() []map[string]any {
 			var params []map[string]any
-			fmt.Println(buf.String())
 			err := json.Unmarshal(buf.Bytes(), &params)
-			assert.Nil(t, err)
+			require.NoError(t, err)
 			return params
 		})
-		assert.Nil(t, err)
+		require.NoError(t, err)
 	}
 	os.Unsetenv(envLogLevel)
 }
@@ -348,11 +352,11 @@ func LogFormatFatalf(t *testing.T) {
 	}
 	LogFormatTest(t, LevelFatalLabel, "fatal log: %t", true)
 	// capture os.Exit escape
-	cmd := exec.Command(os.Args[0], os.Args[1], os.Args[2], os.Args[3], os.Args[4], os.Args[5], "-test.run=LogFormatFatalf")
+	cmd := exec.Command(os.Args[0], os.Args[1], os.Args[2], os.Args[3], os.Args[4], os.Args[5], "-test.run=LogFormatFatalf") // #nosec G204
 	cmd.Env = append(os.Environ(), fmt.Sprintf("%s=%d", envExit, exitCode))
 	err := cmd.Run()
-	assert.NotNil(t, err)
+	require.Error(t, err)
 	e, ok := err.(*exec.ExitError)
 	assert.True(t, ok)
-	assert.True(t, !e.Success())
+	assert.False(t, e.Success())
 }

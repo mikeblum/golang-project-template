@@ -7,6 +7,7 @@ import (
 
 	"github.com/mikeblum/golang-project-template/conftest"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestConf(t *testing.T) {
@@ -24,13 +25,13 @@ func TestConf(t *testing.T) {
 
 func NewConfTest(t *testing.T) {
 	conf, err := NewConf(Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, conf)
 }
 
 func NewConfErrTest(t *testing.T) {
 	conf, err := NewConf(nil)
-	assert.NotNil(t, err)
+	require.Error(t, err)
 	assert.Nil(t, conf)
 }
 
@@ -45,13 +46,13 @@ func EnvConfTest(t *testing.T) {
 	os.Setenv(envVar, expectedValue)
 	defer os.Unsetenv(envVar)
 	conf, err := NewConf(Provider(conftest.TestConfFile))
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, expectedValue, conf.String(envVar))
 }
 
 func GetEnvVarTest(t *testing.T) {
 	envShell := "SHELL"
-	assert.True(t, len(strings.TrimSpace(GetEnv(envShell, ""))) > 0)
+	assert.NotEmpty(t, strings.TrimSpace(GetEnv(envShell, "")))
 }
 
 func GetEnvDefaultTest(t *testing.T) {
