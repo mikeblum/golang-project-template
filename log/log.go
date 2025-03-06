@@ -44,7 +44,7 @@ type Options struct {
 	Level       slog.Leveler
 	ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
 	// LOG_FORMAT supports either text (default) or json
-	Format Format
+	Format FormatLevel
 	// log output defaults to os.Stdout
 	Out io.Writer
 }
@@ -59,9 +59,9 @@ func DefaultOptions() Options {
 	}
 }
 
-type Format int
+type FormatLevel int
 
-func LogLevels() []string {
+func Levels() []string {
 	return []string{
 		LevelTraceName,
 		slog.LevelDebug.String(),
@@ -72,7 +72,7 @@ func LogLevels() []string {
 	}
 }
 
-func LogLevel(level string) (slog.Level, error) {
+func Level(level string) (slog.Level, error) {
 	if level == "" {
 		return defaultLevel, nil
 	}
@@ -91,25 +91,25 @@ func LogLevel(level string) (slog.Level, error) {
 	var ok bool
 	if lvl, ok = logLevels[strings.ToUpper(level)]; !ok {
 		// warn that this log level isn't supported
-		return defaultLevel, fmt.Errorf("Log level: %s not supported. Levels are %s", level, strings.Join(LogLevels(), ", "))
+		return defaultLevel, fmt.Errorf("Log level: %s not supported. Levels are %s", level, strings.Join(Levels(), ", "))
 	}
 	return lvl, nil
 }
 
-func LogFormats() []string {
+func Formats() []string {
 	return []string{
 		textFormat, //
 		jsonFormat,
 	}
 }
 
-func LogFormat(format string) Format {
-	logFormatsMap := map[string]Format{
+func Format(format string) FormatLevel {
+	logFormatsMap := map[string]FormatLevel{
 		// default to text format for the empty zero case
 		textFormat: LogFormatText,
 		jsonFormat: LogFormatJSON,
 	}
-	var logFmt Format
+	var logFmt FormatLevel
 	var ok bool
 	if logFmt, ok = logFormatsMap[strings.ToUpper(format)]; !ok {
 		return LogFormatText
@@ -119,7 +119,7 @@ func LogFormat(format string) Format {
 
 type Log struct {
 	*slog.Logger
-	Format
+	FormatLevel
 }
 
 func NewLog() *Log {
@@ -128,8 +128,8 @@ func NewLog() *Log {
 
 func NewLogWithOptions(options Options) *Log {
 	var log *slog.Logger
-	var logFormat Format = options.Format
-	var logLevel slog.Leveler = options.Level
+	logFormat := options.Format
+	logLevel := options.Level
 
 	if options.Conf == nil {
 		// fallback to default text log if no conf is provided
@@ -144,12 +144,12 @@ func NewLogWithOptions(options Options) *Log {
 
 	// resolve log level
 	if options.Conf.Exists(envLogLevel) {
-		logLevel, _ = LogLevel(options.Conf.String(envLogLevel))
+		logLevel, _ = Level(options.Conf.String(envLogLevel))
 	}
 
 	// resolve log format
 	if options.Conf.Exists(envLogFormat) {
-		logFormat = LogFormat(options.Conf.String(envLogFormat))
+		logFormat = Format(options.Conf.String(envLogFormat))
 	}
 
 	handlerOptions := &slog.HandlerOptions{
@@ -170,10 +170,10 @@ func NewLogWithOptions(options Options) *Log {
 }
 
 // replaceAttr - resolve log levels for TRACE and FATAL
-func replaceAttr(groups []string, attr slog.Attr) slog.Attr {
+func replaceAttr(_ []string, attr slog.Attr) slog.Attr {
 	switch attr.Key {
 	case slog.LevelKey:
-		if lvl, err := LogLevel(attr.Value.Resolve().String()); err == nil {
+		if lvl, err := Level(attr.Value.Resolve().String()); err == nil {
 			logLevels := map[slog.Level]string{
 				LevelTrace:      LevelTraceLabel,
 				slog.LevelDebug: slog.LevelDebug.String(),
@@ -196,7 +196,7 @@ func exit(code int) {
 // https://pkg.go.dev/golang.org/x/exp/slog#hdr-Wrapping_output_methods
 
 func (log *Log) WithError(err error) *Log {
-	return &Log{log.With(logAttrError, err), log.Format}
+	return &Log{log.With(logAttrError, err), log.FormatLevel}
 }
 
 func (log *Log) Tracef(format string, args ...any) {

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -17,7 +18,7 @@ type Suite struct {
 
 func SetupSuite(t *testing.T) (*Suite, func(t *testing.T, conf *os.File)) {
 	conf, err := SetupConf()
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.NotNil(t, conf)
 	return &Suite{
 		Conf: conf,
@@ -41,5 +42,5 @@ func SetupConf() (*os.File, error) {
 
 func CleanupConf(t *testing.T) {
 	err := os.Remove(TestConfFile)
-	assert.Nil(t, err)
+	require.NoError(t, err)
 }
