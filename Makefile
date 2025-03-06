@@ -2,19 +2,19 @@
 
 MAKEFLAGS += --silent
 
-GOLANGCI_LINT_VERSION = v1.63.4
+GOLANGCI_LINT_VERSION = v1.64.6
 
 all: help
 
 ## help: Prints a list of available build targets.
 help:
-	echo "Usage: make <OPTIONS> ... <TARGETS>"
-	echo ""
-	echo "Available targets are:"
-	echo ''
-	sed -n 's/^##//p' ${PWD}/Makefile | column -t -s ':' | sed -e 's/^/ /'
-	echo
-	echo "Targets run by default are: `sed -n 's/^all: //p' ./Makefile | sed -e 's/ /, /g' | sed -e 's/\(.*\), /\1, and /'`"
+	@echo "\033[1;34mUsage:\033[0m make \033[1;36m<OPTIONS>\033[0m ... \033[1;36m<TARGETS>\033[0m"
+	@echo ""
+	@echo "\033[1;35mAvailable targets are:\033[0m"
+	@echo ''
+	@sed -n 's/^##//p' ${PWD}/Makefile | column -t -s ':' | sed -e 's/^/ /' | sed -e 's/\(.*\)/\x1b[32m\1\x1b[0m/'
+	@echo
+	@echo "\033[1;35mTargets run by default are:\033[0m \033[1;32m`sed -n 's/^all: //p' ./Makefile | sed -e 's/ /, /g' | sed -e 's/\(.*\), /\1, and /'`\033[0m"
 
 ## lint: Lint with golangci-lint
 lint:
