@@ -9,6 +9,8 @@ linters-settings:
     # The maximal code complexity to report.
     # Default: 10
     max-complexity: 10
+  errcheck:
+    check-type-assertions: true
   lll:
     # max line length, lines longer will be reported. Default is 120.
     # '\t' is counted as 1 character by default, and can be changed with the tab-width option
@@ -21,21 +23,34 @@ linters:
   enable:
     - bodyclose         # checks whether HTTP response body is closed successfully
     - cyclop            # checks function and package cyclomatic complexity
-    - dupl              # Tool for code clone detection
+    - dupl              # tool for code clone detection
+    - errcheck          # checks for unchecked errors
     - gochecknoglobals  # check that no global variables exist
-    - gocognit          # Computes and checks the cognitive complexity of functions
-    - forbidigo         # forbid fmt.Println
-    - goconst           # Finds repeated strings that could be replaced by a constant
-    - gofmt             # Gofmt checks whether code was gofmt-ed
-    - goimports         # In addition to fixing imports, goimports also formats your code in the same style as gofmt.
-    - gosec             # Inspects source code for security problems
-    - misspell          # Finds commonly misspelled English words in comments
-    - nakedret          # Finds naked returns in functions greater than a specified function length.
-    - prealloc          # Finds slice declarations that could potentially be pre-allocated
+    - forbidigo         # forbid fmt.Println 
+    - gocognit          # computes and checks the cognitive complexity of functions
+    - goconst           # finds repeated strings that could be replaced by a constant
+    - gofmt             # gofmt checks whether code was gofmt-ed
+    - goimports         # in addition to fixing imports, goimports also formats your code in the same style as gofmt.
+    - gosec             # inspects source code for security problems
+    - ineffassign       # detects ineffectual assignments
+    - misspell          # finds commonly misspelled English words in comments
+    - nakedret          # finds naked returns in functions greater than a specified function length.
+    - prealloc          # finds slice declarations that could potentially be pre-allocated
     - revive            # replaces deprecated golint
+    - sloglint          # ensure consistent code style when using log/slog
+    - spancheck         # checks for mistakes with OpenTelemetry/Census spans
+    - sqlclosecheck     # checks that sql.Rows and sql.Stmt are closed
+    - staticcheck       # comprehensive static analyzer
+    - stylecheck        # is a replacement for golint
+    - testifylint       # checks usage of github.com/stretchr/testify
+    - unused            # checks for unused constants, variables, functions and types
+    - whitespace        # detects leading and trailing whitespace
 
 run:
   timeout: 5m
-  go: '1.23.4'
+  tests: true
   issues-exit-code: 1
   modules-download-mode: readonly
+
+service:
+  golangci-lint-version: 1.64.x
