@@ -273,7 +273,7 @@ func LogLevelEmptyTest(t *testing.T) {
 
 func ParseAttrs(t *testing.T, buffer bytes.Buffer) []map[string]any {
 	var attrs []map[string]any
-	for _, line := range bytes.Split(buffer.Bytes(), []byte{'\n'}) {
+	for line := range bytes.SplitSeq(buffer.Bytes(), []byte{'\n'}) {
 		if len(line) == 0 {
 			continue
 		}
