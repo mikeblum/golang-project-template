@@ -4,6 +4,7 @@ MAKEFLAGS += --silent
 
 GOLANGCI_LINT_VERSION = v2.13.2
 CONTAINER_RUNTIME := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
+BIN := $(CURDIR)/bin
 
 all: help
 
@@ -29,8 +30,13 @@ fmt:
 tidy:
 	go mod tidy
 
+## staticcheck: Static analysis with staticcheck
+staticcheck:
+	go build -C tools -o ${BIN}/staticcheck honnef.co/go/tools/cmd/staticcheck
+	${BIN}/staticcheck ./...
+
 ## pre-commit: Chain lint + test + scan
-pre-commit: test lint vuln
+pre-commit: test lint staticcheck vuln
 
 ## run: go run main.go
 run:
@@ -55,4 +61,4 @@ badge badges:
 	COVERAGE=$(go tool cover -func=coverage.out | grep total: | grep -Eo '[0-9]+\.[0-9]+') \
 	curl -sL "https://img.shields.io/static/v1?label=coverage&message=$$COVERAGE%&color=$$COLOR&logo=go" > images/badges/coverage.svg
 
-.PHONY: lint fmt tidy pre-commit test test-perf vuln badges
+.PHONY: lint fmt tidy pre-commit test test-perf vuln badges staticcheck
