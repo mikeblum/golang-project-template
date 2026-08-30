@@ -22,6 +22,10 @@ A 🔋batteries-included Golang project template derived from bootstrapping many
 
 > Fast linters Runner for Go.
 
+`staticcheck`: https://staticcheck.dev/
+
+> Advanced Go linter, pinned as a build tool under `tools/` and run with `make staticcheck`.
+
 `log/slog`: 
 
 > Stdlib structured, pluggable logging >= Go 1.21.0.

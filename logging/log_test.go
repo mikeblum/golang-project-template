@@ -14,7 +14,7 @@ import (
 	"testing/slogtest"
 
 	"github.com/mikeblum/golang-project-template/conf"
-	"github.com/mikeblum/golang-project-template/conftest"
+	"github.com/mikeblum/golang-project-template/internal/conftest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -273,7 +273,7 @@ func LogLevelEmptyTest(t *testing.T) {
 
 func ParseAttrs(t *testing.T, buffer bytes.Buffer) []map[string]any {
 	var attrs []map[string]any
-	for _, line := range bytes.Split(buffer.Bytes(), []byte{'\n'}) {
+	for line := range bytes.SplitSeq(buffer.Bytes(), []byte{'\n'}) {
 		if len(line) == 0 {
 			continue
 		}
@@ -352,7 +352,7 @@ func LogFormatFatalf(t *testing.T) {
 	}
 	LogFormatTest(t, LevelFatalLabel, "fatal log: %t", true)
 	// capture os.Exit escape
-	cmd := exec.Command(os.Args[0], os.Args[1], os.Args[2], os.Args[3], os.Args[4], os.Args[5], "-test.run=LogFormatFatalf") // #nosec G204
+	cmd := exec.Command(os.Args[0], os.Args[1], os.Args[2], os.Args[3], os.Args[4], os.Args[5], "-test.run=LogFormatFatalf") // #nosec G204 G702 -- re-exec of the test binary with os.Args, not attacker-controlled input
 	cmd.Env = append(os.Environ(), fmt.Sprintf("%s=%d", envExit, exitCode))
 	err := cmd.Run()
 	require.Error(t, err)
