@@ -352,7 +352,7 @@ func LogFormatFatalf(t *testing.T) {
 	}
 	LogFormatTest(t, LevelFatalLabel, "fatal log: %t", true)
 	// capture os.Exit escape
-	cmd := exec.Command(os.Args[0], os.Args[1], os.Args[2], os.Args[3], os.Args[4], os.Args[5], "-test.run=LogFormatFatalf") // #nosec G204
+	cmd := exec.Command(os.Args[0], os.Args[1], os.Args[2], os.Args[3], os.Args[4], os.Args[5], "-test.run=LogFormatFatalf") // #nosec G204 G702 -- re-exec of the test binary with os.Args, not attacker-controlled input
 	cmd.Env = append(os.Environ(), fmt.Sprintf("%s=%d", envExit, exitCode))
 	err := cmd.Run()
 	require.Error(t, err)
