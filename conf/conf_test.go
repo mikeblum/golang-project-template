@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mikeblum/golang-project-template/conftest"
+	"github.com/mikeblum/golang-project-template/internal/conftest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
